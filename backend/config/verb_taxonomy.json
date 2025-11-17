@@ -1,0 +1,122 @@
+{
+  "Innovator": {
+    "hebrew": [
+      "יצר", "פיתח", "בנה", "חידש", "הקים", "השיק",
+      "יזם", "תכנן", "עיצב", "הנדס", "המציא", "ייסד",
+      "ארכטקט", "הוביל פיתוח", "הקמתי", "בניתי", "פיתחתי",
+      "יצרתי", "עיצבתי", "תכננתי", "הנדסתי"
+    ],
+    "english": [
+      "created", "developed", "built", "innovated", "established",
+      "launched", "pioneered", "designed", "conceived", "engineered",
+      "invented", "founded", "architected", "initiated", "prototyped",
+      "spearheaded development", "bootstrapped", "originated"
+    ],
+    "weight": 1.0,
+    "framenet": [
+      "Creating", "Intentionally_create", "Building",
+      "Inventing", "Achieving_first"
+    ],
+    "context_markers": [
+      "from scratch", "new", "first-time", "prototype", "MVP",
+      "greenfield", "0 to 1", "הקמה", "חדש", "לראשונה",
+      "אב טיפוס", "מאפס", "ראשוני"
+    ]
+  },
+
+  "Leader": {
+    "hebrew": [
+      "הוביל", "ניהל", "הדריך", "השפיע", "איפשר",
+      "העצים", "קידם", "יזם", "תיאם", "הנחה", "מנהל",
+      "הובלתי", "ניהלתי", "הדרכתי", "קידמתי", "תיאמתי"
+    ],
+    "english": [
+      "led", "managed", "directed", "coached", "influenced",
+      "enabled", "empowered", "orchestrated", "spearheaded",
+      "championed", "drove", "mobilized", "guided", "supervised",
+      "oversaw", "coordinated", "delegated", "mentored"
+    ],
+    "weight": 0.95,
+    "framenet": [
+      "Leadership", "Influence", "Cause_to_start",
+      "Assistance", "Subjective_influence"
+    ],
+    "context_markers": [
+      "team of", "cross-functional", "stakeholder", "initiative",
+      "strategy", "roadmap", "צוות", "יוזמה", "אסטרטגיה",
+      "צוות בן", "פרוייקט", "דירקטורים"
+    ]
+  },
+
+  "Maintainer": {
+    "hebrew": [
+      "תחזק", "שמר", "הפעיל", "אופטמז", "שיפר",
+      "עקב", "ניטר", "הגביר", "ייעל", "תפעל",
+      "תחזקתי", "שמרתי", "הפעלתי", "אופטמזתי", "שיפרתי",
+      "ייעלתי", "תפעלתי", "ניטרתי"
+    ],
+    "english": [
+      "maintained", "operated", "optimized", "improved", "sustained",
+      "monitored", "enhanced", "refined", "streamlined", "stabilized",
+      "administered", "preserved", "upgraded", "tuned", "calibrated"
+    ],
+    "weight": 0.85,
+    "framenet": [
+      "Preserving", "Maintaining", "Operating",
+      "Sustaining", "Activity_ongoing"
+    ],
+    "context_markers": [
+      "existing", "day-to-day", "production", "SLA", "uptime",
+      "legacy", "BAU", "קיים", "יומיום", "פרודקשן",
+      "תפעול", "זמינות", "עבודה שוטפת"
+    ]
+  },
+
+  "Problem-Solver": {
+    "hebrew": [
+      "פתר", "אבחן", "חקר", "זיהה", "חקר",
+      "דיבג", "אישש", "ניתח", "גילה", "תיקן",
+      "פתרתי", "אבחנתי", "חקרתי", "זיהיתי", "ניתחתי",
+      "תיקנתי", "דיבגתי"
+    ],
+    "english": [
+      "solved", "diagnosed", "researched", "identified", "troubleshot",
+      "debugged", "investigated", "analyzed", "discovered", "fixed",
+      "resolved", "uncovered", "detected", "traced", "isolated",
+      "remediated", "addressed"
+    ],
+    "weight": 0.90,
+    "framenet": [
+      "Resolve_problem", "Finding", "Experimentation", "Research"
+    ],
+    "context_markers": [
+      "issue", "bug", "bottleneck", "root cause", "investigation",
+      "incident", "בעיה", "באג", "צוואר בקבוק", "חקירה",
+      "תקלה", "ניתוח שורש"
+    ]
+  },
+
+  "Enabler": {
+    "hebrew": [
+      "תמך", "סייע", "תיאם", "הנחה", "תרגל",
+      "הדריך", "אימן", "שיתף", "העביר ידע", "תיעד",
+      "תמכתי", "סייעתי", "תיאמתי", "הדרכתי", "אימנתי",
+      "תיעדתי", "שיתפתי"
+    ],
+    "english": [
+      "supported", "assisted", "coordinated", "facilitated", "trained",
+      "guided", "collaborated", "mentored", "documented", "shared",
+      "helped", "contributed", "partnered", "enabled", "onboarded",
+      "consulted", "advised"
+    ],
+    "weight": 0.80,
+    "framenet": [
+      "Supporting", "Collaboration", "Assistance", "Communication"
+    ],
+    "context_markers": [
+      "enabled", "trained", "onboarded", "documentation", "mentoring",
+      "knowledge sharing", "תמיכה", "הדרכה", "תיעוד",
+      "שיתוף פעולה", "העברת ידע", "חונכות"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+# Backend
+backend/__pycache__
+backend/**/__pycache__
+backend/.pytest_cache
+backend/**/.pytest_cache
+backend/venv
+backend/**/*.pyc
+backend/**/*.pyo
+backend/**/*.pyd
+backend/.env
+backend/**/.env.local
+backend/resume_screening.db
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/build
+frontend/.env
+frontend/.env.local
+frontend/.env.production.local
+frontend/.env.development.local
+frontend/.env.test.local
+
+# General
+.git
+.gitignore
+*.md
+*.log
+.DS_Store
+.vscode
+.idea

@@ -1,0 +1,63 @@
+{
+  "jobs": [
+    {
+      "name": "Senior Backend Engineer",
+      "description": "Building scalable microservices and APIs",
+      "archetype_primary": "Innovator",
+      "archetype_secondary": "Problem-Solver",
+      "required_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "Microservices"],
+      "preferred_skills": ["Kubernetes", "AWS", "Redis", "CI/CD"],
+      "min_experience_years": 5
+    },
+    {
+      "name": "DevOps Engineer",
+      "description": "Maintaining and optimizing cloud infrastructure",
+      "archetype_primary": "Maintainer",
+      "archetype_secondary": "Problem-Solver",
+      "required_skills": ["Docker", "Kubernetes", "AWS", "Linux", "CI/CD"],
+      "preferred_skills": ["Terraform", "Ansible", "Prometheus", "Grafana"],
+      "min_experience_years": 3
+    },
+    {
+      "name": "Engineering Manager",
+      "description": "Leading engineering teams and driving technical strategy",
+      "archetype_primary": "Leader",
+      "archetype_secondary": "Enabler",
+      "required_skills": ["Team Leadership", "Project Management", "Agile", "Technical Architecture"],
+      "preferred_skills": ["Stakeholder Management", "Budget Management", "Hiring"],
+      "min_experience_years": 7
+    }
+  ],
+  "resumes": [
+    {
+      "name": "Sarah Johnson",
+      "email": "sarah@example.com",
+      "job": "Senior Backend Engineer",
+      "resume_text": "Experienced software engineer who created and developed multiple microservices from scratch. Built scalable APIs using Python and FastAPI. Pioneered the adoption of containerization with Docker. Designed and architected cloud-native solutions on AWS. Developed CI/CD pipelines for automated deployments. Innovated new patterns for service communication. Created monitoring dashboards and alerting systems. Skills: Python, FastAPI, PostgreSQL, Docker, Kubernetes, AWS, Redis, Microservices, CI/CD, REST APIs."
+    },
+    {
+      "name": "Mike Chen",
+      "email": "mike@example.com",
+      "job": "DevOps Engineer",
+      "resume_text": "DevOps engineer with 4 years of experience. Maintained production infrastructure serving millions of users. Operated and monitored Kubernetes clusters across multiple regions. Optimized cloud costs by 40% through resource management. Improved system reliability and uptime to 99.9%. Sustained high-performance systems under heavy load. Enhanced deployment processes for faster releases. Monitored and debugged infrastructure issues. Skills: Docker, Kubernetes, AWS, Linux, Terraform, Ansible, Prometheus, Grafana, CI/CD, Infrastructure as Code."
+    },
+    {
+      "name": "Alex Rivera",
+      "email": "alex@example.com",
+      "job": "Engineering Manager",
+      "resume_text": "Engineering leader with 10 years of experience. Led cross-functional teams of 15+ engineers. Managed multiple high-impact projects simultaneously. Directed technical strategy and architecture decisions. Coached and mentored junior engineers for career growth. Influenced stakeholder decisions through data-driven insights. Enabled team success by removing blockers and providing resources. Championed agile methodologies and best practices. Drove cultural change towards DevOps and automation. Skills: Team Leadership, Project Management, Agile/Scrum, Technical Architecture, Stakeholder Management, Hiring, Performance Management."
+    },
+    {
+      "name": "Emma Wilson",
+      "email": "emma@example.com",
+      "job": "Senior Backend Engineer",
+      "resume_text": "Maintained legacy backend systems written in PHP and Java. Supported day-to-day operations of production services. Fixed bugs and resolved customer issues. Assisted team members with technical questions. Coordinated releases with QA team. Documented existing codebases and processes. Trained new hires on system architecture. Skills: PHP, Java, MySQL, Basic Docker knowledge, Limited Python experience."
+    },
+    {
+      "name": "David Park",
+      "email": "david@example.com",
+      "job": "DevOps Engineer",
+      "resume_text": "Software engineer who built and created cloud infrastructure automation tools. Developed Infrastructure as Code using Terraform. Pioneered GitOps workflows for deployment. Designed observability solutions with Prometheus and Grafana. Innovated new approaches to container orchestration. Architected multi-region disaster recovery solutions. Created self-healing infrastructure systems. Skills: Docker, Kubernetes, AWS, Terraform, Ansible, GitOps, Prometheus, Grafana, Python."
+    }
+  ]
+}
