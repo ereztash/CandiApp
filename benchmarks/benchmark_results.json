@@ -1,0 +1,737 @@
+{
+  "analysis": {
+    "speed": {
+      "avg_time": 0.0008566093444824219,
+      "median_time": 0.0008395910263061523,
+      "min_time": 0.0006566047668457031,
+      "max_time": 0.0014870166778564453,
+      "target": 1.0,
+      "meets_target": true
+    },
+    "accuracy": {
+      "overall": 33.333333333333336,
+      "by_field": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      },
+      "target": 90.0,
+      "meets_target": false
+    },
+    "fields": {
+      "avg_extracted": 19,
+      "target": 50,
+      "meets_target": false
+    },
+    "errors": {
+      "count": 0,
+      "rate": 0.0,
+      "total_resumes": 50
+    }
+  },
+  "results": [
+    {
+      "id": 0,
+      "time": 0.0014870166778564453,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 1,
+      "time": 0.0008628368377685547,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 2,
+      "time": 0.00083160400390625,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 3,
+      "time": 0.000759124755859375,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 4,
+      "time": 0.0007760524749755859,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 5,
+      "time": 0.0009222030639648438,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 6,
+      "time": 0.0008959770202636719,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 7,
+      "time": 0.00072479248046875,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 8,
+      "time": 0.0009570121765136719,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 9,
+      "time": 0.0008540153503417969,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 10,
+      "time": 0.0008082389831542969,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 11,
+      "time": 0.000701904296875,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 12,
+      "time": 0.0007228851318359375,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 13,
+      "time": 0.00096893310546875,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 14,
+      "time": 0.0008292198181152344,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 15,
+      "time": 0.00077056884765625,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 16,
+      "time": 0.0009019374847412109,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 17,
+      "time": 0.0008478164672851562,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 18,
+      "time": 0.0007870197296142578,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 19,
+      "time": 0.0007491111755371094,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 20,
+      "time": 0.0008890628814697266,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 21,
+      "time": 0.0008294582366943359,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 22,
+      "time": 0.0008478164672851562,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 23,
+      "time": 0.0009050369262695312,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 24,
+      "time": 0.0007352828979492188,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 25,
+      "time": 0.0007236003875732422,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 26,
+      "time": 0.0008716583251953125,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 27,
+      "time": 0.0009238719940185547,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 28,
+      "time": 0.0009455680847167969,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 29,
+      "time": 0.0007913112640380859,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 30,
+      "time": 0.0009834766387939453,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 31,
+      "time": 0.0007493495941162109,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 32,
+      "time": 0.0011324882507324219,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 33,
+      "time": 0.0007357597351074219,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 34,
+      "time": 0.0009298324584960938,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 35,
+      "time": 0.0009002685546875,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 36,
+      "time": 0.0008308887481689453,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 37,
+      "time": 0.0008471012115478516,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 38,
+      "time": 0.0007772445678710938,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 39,
+      "time": 0.0006566047668457031,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 40,
+      "time": 0.000993967056274414,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 41,
+      "time": 0.001116037368774414,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 42,
+      "time": 0.0007379055023193359,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 43,
+      "time": 0.0007748603820800781,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 44,
+      "time": 0.0009028911590576172,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 45,
+      "time": 0.0008952617645263672,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 46,
+      "time": 0.0009655952453613281,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 47,
+      "time": 0.0006873607635498047,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 48,
+      "time": 0.0008320808410644531,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    },
+    {
+      "id": 49,
+      "time": 0.0007605552673339844,
+      "fields": 19,
+      "errors": [],
+      "accuracy": {
+        "name": 100.0,
+        "email": 100.0,
+        "phone": 0.0,
+        "skills": 0.0,
+        "experience_count": 0.0,
+        "education_count": 0.0
+      }
+    }
+  ]
+}
