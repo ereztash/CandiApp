@@ -1,1 +1,4 @@
-# Benchmark data - generated files\ndata/
+# Benchmark data - generated files
+data/
+*.json
+!benchmark_results.json
