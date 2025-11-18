@@ -11,7 +11,7 @@ Features:
 
 import re
 import logging
-from typing import Dict, List, Optional, Tuple, Set
+from typing import Dict, List, Optional, Tuple, Set, Any
 from datetime import datetime
 from dateutil import parser as date_parser
 import warnings
