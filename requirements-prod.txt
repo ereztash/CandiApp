@@ -1,0 +1,70 @@
+# Production requirements for CandiApp
+# Optimized for Docker deployment
+
+# Core Dependencies
+python-dateutil>=2.8.0
+numpy>=1.24.0,<2.0.0
+
+# PDF Processing
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0
+
+# DOCX Processing
+python-docx>=1.0.0
+docx2txt>=0.8
+
+# NLP - spaCy (with large models)
+spacy>=3.7.0
+# Note: Models downloaded in Dockerfile:
+# - en_core_web_lg
+# - es_core_news_lg
+# - fr_core_news_lg
+# - de_core_news_lg
+
+# Machine Learning
+scikit-learn>=1.3.0
+
+# Advanced NLP (optional but recommended)
+# Uncomment if using BERT features
+# transformers>=4.35.0
+# torch>=2.0.0
+# sentence-transformers>=2.2.0
+
+# API/Web (if running as service)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Database (optional)
+# SQLAlchemy>=2.0.0
+# psycopg2-binary>=2.9.0
+# alembic>=1.12.0
+
+# Caching
+redis>=5.0.0
+
+# Configuration
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+
+# Monitoring and logging
+structlog>=23.2.0
+
+# Performance
+joblib>=1.3.0
+
+# Data validation
+pydantic>=2.5.0
+
+# Utilities
+tqdm>=4.66.0
+click>=8.1.0
+
+# Security
+cryptography>=41.0.0
+
+# Production server
+gunicorn>=21.2.0
+
+# Health checks
+psutil>=5.9.0
