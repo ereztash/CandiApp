@@ -1,0 +1,154 @@
+version: '3.8'
+
+services:
+  # Main CandiApp service
+  candiapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: candiapp:latest
+    container_name: candiapp
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount data directories
+      - ./data/uploads:/app/data/uploads
+      - ./data/features:/app/data/features
+      - ./logs:/app/logs
+      # Mount config (if exists)
+      - ./config:/app/config:ro
+    environment:
+      # Application settings
+      - CANDIAPP_ENV=production
+      - CANDIAPP_DEBUG=false
+      - CANDIAPP_LOG_LEVEL=INFO
+
+      # Feature engineering settings
+      - CANDIAPP_USE_GPU=false
+      - CANDIAPP_USE_BERT=true
+      - CANDIAPP_USE_SPACY_LARGE=true
+
+      # Multilingual settings
+      - CANDIAPP_LANGUAGES=en,es,fr,de,he
+
+      # Database (if using)
+      # - CANDIAPP_DB_URL=postgresql://user:password@postgres:5432/candiapp
+
+      # Redis (if using for caching)
+      # - CANDIAPP_REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - candiapp-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import candiapp; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # CandiApp with GPU support (uncomment if using GPU)
+  # candiapp-gpu:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.gpu
+  #   image: candiapp:gpu
+  #   container_name: candiapp-gpu
+  #   runtime: nvidia
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8001:8000"
+  #   volumes:
+  #     - ./data/uploads:/app/data/uploads
+  #     - ./data/features:/app/data/features
+  #     - ./logs:/app/logs
+  #   environment:
+  #     - CANDIAPP_USE_GPU=true
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #   networks:
+  #     - candiapp-network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: candiapp-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - candiapp-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL database (optional)
+  postgres:
+    image: postgres:15-alpine
+    container_name: candiapp-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=candiapp
+      - POSTGRES_PASSWORD=candiapp_password
+      - POSTGRES_DB=candiapp
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - candiapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U candiapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Feature Store service (optional - for distributed setup)
+  feature-store:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: candiapp:latest
+    container_name: candiapp-feature-store
+    restart: unless-stopped
+    command: python -m candiapp.feature_store --serve
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./data/features:/app/data/features
+    environment:
+      - CANDIAPP_FEATURE_STORE_PORT=8001
+    networks:
+      - candiapp-network
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: candiapp-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - candiapp
+    networks:
+      - candiapp-network
+
+volumes:
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  candiapp-network:
+    driver: bridge

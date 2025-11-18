@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation
+docs/_build/
+
+# Data and logs (don't include in image)
+data/
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Local development
+*.local
+.env
+.env.local
+
+# Benchmarks and tests (don't need in prod)
+benchmarks/benchmark_results*.json
+benchmarks/benchmark_report*.html
+benchmarks/quick_benchmark_results.json
+tests/
+
+# Examples
+examples/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large model files (download at runtime instead)
+*.bin
+*.h5
+*.pth
+*.onnx
+models/
+
+# Feature store data
+feature_store/
+*.pkl
+*.joblib
