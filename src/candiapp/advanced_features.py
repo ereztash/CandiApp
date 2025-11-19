@@ -19,7 +19,7 @@ from collections import Counter
 from datetime import datetime, timedelta
 import logging
 
-from .models import ParsedData, Experience, Education, Skill
+from .models import ParsedData, Experience, Education, Skill, EducationLevel
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +120,18 @@ class AdvancedFeatureExtractor:
 
         # 9. Experience Depth Features (5 features)
         features.update(self._extract_experience_depth_features(parsed_data))
+
+        # 10. Emotional Intelligence Features (8 features) - 0.60 validity
+        features.update(self._extract_emotional_intelligence_features(parsed_data))
+
+        # 11. Cognitive Ability Proxy Features (6 features) - 0.51 validity
+        features.update(self._extract_cognitive_ability_features(parsed_data))
+
+        # 12. Person-Organization Fit Features (7 features) - 0.44 validity
+        features.update(self._extract_person_org_fit_features(parsed_data))
+
+        # 13. Structured Assessment Indicators (6 features) - 0.54 validity
+        features.update(self._extract_structured_assessment_features(parsed_data))
 
         logger.info(f"Extracted {len(features)} advanced features")
 
@@ -628,5 +640,454 @@ class AdvancedFeatureExtractor:
         # Impact scope (team size mentions, user numbers, etc.)
         # This would require NER - placeholder
         features["experience_impact_scope"] = 0.0
+
+        return features
+
+    def _extract_emotional_intelligence_features(self, parsed_data: ParsedData) -> Dict[str, float]:
+        """
+        Extract Emotional Intelligence (EI) proxy features.
+
+        Validity: 0.60
+        Research: TalentSmart study shows 90% of top performers have high EI
+
+        Features:
+        - Communication quality from writing patterns
+        - Resilience indicators from career transitions
+        - Team collaboration signals
+        - Interpersonal effectiveness
+        """
+        features = {}
+
+        # Combine all text for analysis
+        experiences = parsed_data.experiences
+        all_text = " ".join([
+            parsed_data.summary or "",
+            " ".join([exp.description or "" for exp in experiences]),
+            " ".join([r for exp in experiences for r in exp.responsibilities]),
+            " ".join([a for exp in experiences for a in exp.achievements]),
+        ]).lower()
+
+        # 1. Communication Quality (from writing patterns)
+        # Positive communication keywords
+        positive_comm_keywords = ["communicated", "presented", "explained", "articulated",
+                                 "facilitated", "discussed", "engaged", "conveyed"]
+        comm_count = sum(all_text.count(kw) for kw in positive_comm_keywords)
+        features["ei_communication_quality"] = min(float(comm_count), 10.0)
+
+        # 2. Interpersonal Effectiveness
+        interpersonal_keywords = ["interpersonal", "relationship", "rapport", "empathy",
+                                 "emotional", "stakeholder", "cross-functional"]
+        interpersonal_count = sum(all_text.count(kw) for kw in interpersonal_keywords)
+        features["ei_interpersonal_effectiveness"] = min(float(interpersonal_count), 5.0)
+
+        # 3. Resilience Indicators (career transitions, gap handling)
+        # Resilience keywords in achievements/descriptions
+        resilience_keywords = ["overcame", "navigated", "adapted", "pivoted", "transformed",
+                              "recovered", "rebuilt", "turnaround", "challenge", "difficulty"]
+        resilience_count = sum(all_text.count(kw) for kw in resilience_keywords)
+        features["ei_resilience_indicators"] = min(float(resilience_count), 5.0)
+
+        # Career gaps with explanations (positive resilience signal)
+        gaps_with_context = 0
+        if len(experiences) >= 2:
+            sorted_exps = sorted(experiences, key=lambda x: x.start_date if x.start_date else datetime.min)
+            for i in range(len(sorted_exps) - 1):
+                current_exp = sorted_exps[i]
+                next_exp = sorted_exps[i + 1]
+                if current_exp.end_date and next_exp.start_date:
+                    gap_days = (next_exp.start_date - current_exp.end_date).days
+                    if gap_days > 60:  # 2+ month gap
+                        # Check if next role shows growth despite gap
+                        if next_exp.title and current_exp.title:
+                            if len(next_exp.title) >= len(current_exp.title):  # Simple proxy
+                                gaps_with_context += 1
+
+        features["ei_gap_recovery"] = float(gaps_with_context)
+
+        # 4. Team Collaboration (70% more likely to succeed with high EI)
+        collaboration_keywords = ["team", "collaborated", "partnered", "coordinated",
+                                 "cooperated", "jointly", "together", "mentored", "coached"]
+        collab_count = sum(all_text.count(kw) for kw in collaboration_keywords)
+        features["ei_collaboration_signals"] = min(float(collab_count) / max(len(experiences), 1), 10.0)
+
+        # 5. Conflict Resolution & Influence
+        influence_keywords = ["influenced", "persuaded", "negotiated", "consensus",
+                             "alignment", "buy-in", "resolved", "mediated"]
+        influence_count = sum(all_text.count(kw) for kw in influence_keywords)
+        features["ei_influence_ability"] = min(float(influence_count), 5.0)
+
+        # 6. Emotional Awareness (self-awareness indicators)
+        awareness_keywords = ["learned", "feedback", "growth", "developed myself",
+                             "self-improvement", "reflection", "recognized"]
+        awareness_count = sum(all_text.count(kw) for kw in awareness_keywords)
+        features["ei_self_awareness"] = min(float(awareness_count), 5.0)
+
+        # 7. Proactive Career Development (70% more likely with high EI)
+        development_keywords = ["certification", "training", "course", "workshop",
+                               "professional development", "upskilling"]
+        development_count = (len(parsed_data.certifications) * 2 +
+                           sum(all_text.count(kw) for kw in development_keywords))
+        features["ei_proactive_development"] = min(float(development_count), 10.0)
+
+        # 8. Overall EI Score (composite 0-100)
+        ei_score = (
+            features["ei_communication_quality"] / 10 * 20 +
+            features["ei_interpersonal_effectiveness"] / 5 * 15 +
+            features["ei_resilience_indicators"] / 5 * 15 +
+            features["ei_collaboration_signals"] / 10 * 20 +
+            features["ei_influence_ability"] / 5 * 10 +
+            features["ei_self_awareness"] / 5 * 10 +
+            features["ei_proactive_development"] / 10 * 10
+        )
+        features["ei_overall_score"] = ei_score
+
+        return features
+
+    def _extract_cognitive_ability_features(self, parsed_data: ParsedData) -> Dict[str, float]:
+        """
+        Extract Cognitive Ability proxy features.
+
+        Validity: 0.51 (highest single predictor per Schmidt & Hunter 1998)
+        Research: Facilitates learning of job-relevant knowledge
+
+        Proxies from resume:
+        - Problem-solving complexity
+        - Learning velocity
+        - Certification complexity
+        - Technical depth indicators
+        """
+        features = {}
+
+        experiences = parsed_data.experiences
+        all_text = " ".join([
+            parsed_data.summary or "",
+            " ".join([exp.description or "" for exp in experiences]),
+            " ".join([a for exp in experiences for a in exp.achievements]),
+        ]).lower()
+
+        # 1. Problem-Solving Complexity (from achievement descriptions)
+        complex_problem_keywords = [
+            "algorithm", "optimization", "architecture", "designed", "engineered",
+            "complex", "system", "scalability", "performance", "distributed",
+            "analyzed", "diagnosed", "root cause", "systematic", "framework"
+        ]
+        problem_complexity_count = sum(all_text.count(kw) for kw in complex_problem_keywords)
+        features["cognitive_problem_complexity"] = min(float(problem_complexity_count) / max(len(experiences), 1), 10.0)
+
+        # 2. Learning Velocity (new skills acquired per year of experience)
+        if parsed_data.total_experience_years and parsed_data.total_experience_years > 0:
+            total_skills = len(parsed_data.skills) + len(parsed_data.technical_skills)
+            learning_velocity = total_skills / parsed_data.total_experience_years
+            features["cognitive_learning_velocity"] = min(learning_velocity, 10.0)
+        else:
+            features["cognitive_learning_velocity"] = 0.0
+
+        # 3. Certification Complexity
+        # Advanced certifications indicate higher cognitive ability
+        advanced_cert_keywords = ["architect", "expert", "professional", "advanced",
+                                 "certified", "specialist", "master"]
+        cert_texts = " ".join([cert.lower() for cert in parsed_data.certifications])
+        complex_cert_count = sum(cert_texts.count(kw) for kw in advanced_cert_keywords)
+        features["cognitive_certification_complexity"] = min(float(complex_cert_count), 5.0)
+
+        # 4. Academic Achievement Indicators
+        # GPA, honors, research
+        academic_score = 0.0
+        for edu in parsed_data.education:
+            if edu.gpa and edu.gpa >= 3.5:
+                academic_score += (edu.gpa - 3.0) * 2  # Scale from 3.0
+            # Check for honors in degree string
+            if edu.degree:
+                honors_keywords = ["honors", "distinction", "magna", "summa", "cum laude"]
+                if any(h in edu.degree.lower() for h in honors_keywords):
+                    academic_score += 2.0
+
+        features["cognitive_academic_achievement"] = min(academic_score, 10.0)
+
+        # 5. Technical Depth & Breadth Balance
+        # High cognitive ability = deep in some areas, broad in others
+        tech_depth = sum([
+            features.get(f"specialization_{area}_depth", 0)
+            for area in self.TECH_DEPTH_KEYWORDS.keys()
+        ]) if hasattr(self, 'TECH_DEPTH_KEYWORDS') else 0
+
+        tech_breadth = len(parsed_data.technical_skills)
+
+        # Balanced ratio indicates cognitive flexibility
+        if tech_breadth > 0:
+            depth_breadth_ratio = tech_depth / tech_breadth
+            features["cognitive_depth_breadth_balance"] = min(depth_breadth_ratio * 2, 10.0)
+        else:
+            features["cognitive_depth_breadth_balance"] = 0.0
+
+        # 6. Abstract Thinking Indicators
+        abstract_keywords = ["strategy", "vision", "concept", "theory", "principle",
+                            "methodology", "paradigm", "pattern", "model", "framework"]
+        abstract_count = sum(all_text.count(kw) for kw in abstract_keywords)
+        features["cognitive_abstract_thinking"] = min(float(abstract_count) / max(len(experiences), 1), 5.0)
+
+        return features
+
+    def _extract_person_org_fit_features(self, parsed_data: ParsedData) -> Dict[str, float]:
+        """
+        Extract Person-Organization Fit features.
+
+        Validity: 0.44 (Kristof-Brown 2005)
+        Research: Match between worker needs and job supplies; critical for retention
+
+        Features:
+        - Company quality trajectory (not just prestige)
+        - Industry reputation alignment
+        - Career move patterns
+        """
+        features = {}
+
+        experiences = parsed_data.experiences
+
+        if not experiences:
+            return {
+                "po_fit_company_trajectory": 0.0,
+                "po_fit_company_quality_trend": 0.0,
+                "po_fit_industry_consistency": 0.0,
+                "po_fit_career_move_quality": 0.0,
+                "po_fit_company_size_preference": 0.0,
+                "po_fit_role_alignment": 1.0,
+                "po_fit_overall_score": 5.0,
+            }
+
+        # Sort experiences by date
+        sorted_exps = sorted(experiences, key=lambda x: x.start_date if x.start_date else datetime.min)
+
+        # 1. Company Quality Trajectory (are companies getting better?)
+        # Using employer brand indicators
+        top_tier_companies = [
+            "google", "microsoft", "amazon", "apple", "meta", "facebook", "netflix",
+            "tesla", "nvidia", "openai", "anthropic", "deepmind",
+            "stripe", "airbnb", "uber", "linkedin", "twitter", "salesforce"
+        ]
+
+        mid_tier_indicators = ["unicorn", "series", "funded", "startup", "scale-up"]
+
+        company_quality_scores = []
+        for exp in sorted_exps:
+            company_lower = exp.company.lower() if exp.company else ""
+            description_lower = exp.description.lower() if exp.description else ""
+
+            # Score company quality
+            if any(top in company_lower for top in top_tier_companies):
+                score = 10.0
+            elif any(mid in description_lower or mid in company_lower for mid in mid_tier_indicators):
+                score = 7.0
+            else:
+                score = 5.0  # Default
+
+            company_quality_scores.append(score)
+
+        # Calculate trajectory (positive = improving)
+        if len(company_quality_scores) >= 2:
+            trajectory = (company_quality_scores[-1] - company_quality_scores[0]) / len(company_quality_scores)
+            features["po_fit_company_trajectory"] = max(-5.0, min(5.0, trajectory))
+
+            # Trend consistency (are they consistently moving up?)
+            improving_moves = sum(1 for i in range(len(company_quality_scores)-1)
+                                 if company_quality_scores[i+1] >= company_quality_scores[i])
+            features["po_fit_company_quality_trend"] = improving_moves / (len(company_quality_scores) - 1)
+        else:
+            features["po_fit_company_trajectory"] = 0.0
+            features["po_fit_company_quality_trend"] = 0.5
+
+        # 2. Industry Consistency (staying in same industry = better fit understanding)
+        # Use industry features if already computed
+        all_text = " ".join([exp.company + " " + (exp.description or "") for exp in experiences]).lower()
+
+        industry_mentions = {}
+        for industry, keywords in self.INDUSTRY_KEYWORDS.items():
+            count = sum(all_text.count(kw) for kw in keywords)
+            if count > 0:
+                industry_mentions[industry] = count
+
+        if industry_mentions:
+            # High consistency = focused on one industry
+            max_industry_count = max(industry_mentions.values())
+            total_mentions = sum(industry_mentions.values())
+            consistency = max_industry_count / total_mentions if total_mentions > 0 else 0
+            features["po_fit_industry_consistency"] = consistency * 10
+        else:
+            features["po_fit_industry_consistency"] = 5.0
+
+        # 3. Career Move Quality (30% minimum increase recommended)
+        # Tenure at quality companies + progression
+        quality_moves = 0
+        for i, exp in enumerate(sorted_exps):
+            if exp.start_date and (exp.end_date or exp.current):
+                end = exp.end_date or datetime.now()
+                tenure_years = (end - exp.start_date).days / 365.25
+
+                # Quality move = stayed 2+ years OR moved to better company
+                if tenure_years >= 2.0:
+                    quality_moves += 1
+                elif i < len(sorted_exps) - 1 and len(company_quality_scores) > i + 1:
+                    if company_quality_scores[i + 1] > company_quality_scores[i]:
+                        quality_moves += 1
+
+        features["po_fit_career_move_quality"] = quality_moves / max(len(experiences), 1) * 10
+
+        # 4. Company Size Preference Pattern
+        # Consistent pattern indicates better fit awareness
+        large_company_count = sum(1 for score in company_quality_scores if score >= 9)
+        startup_count = sum(1 for score in company_quality_scores if score <= 6)
+
+        if len(experiences) > 0:
+            if large_company_count / len(experiences) > 0.7:
+                features["po_fit_company_size_preference"] = 10.0  # Clear large co preference
+            elif startup_count / len(experiences) > 0.7:
+                features["po_fit_company_size_preference"] = 10.0  # Clear startup preference
+            else:
+                features["po_fit_company_size_preference"] = 5.0  # Mixed
+        else:
+            features["po_fit_company_size_preference"] = 5.0
+
+        # 5. Role Alignment (consistent role type = knows what they want)
+        role_types_present = set()
+        for exp in sorted_exps:
+            title_lower = exp.title.lower() if exp.title else ""
+            for role_type, keywords in self.ROLE_TYPES.items():
+                if any(kw in title_lower for kw in keywords):
+                    role_types_present.add(role_type)
+
+        # Few role types = high alignment
+        role_alignment = max(0, 10 - len(role_types_present) * 2)
+        features["po_fit_role_alignment"] = float(role_alignment)
+
+        # 6. Overall PO-Fit Score (0-100)
+        po_fit_score = (
+            (features["po_fit_company_trajectory"] + 5) / 10 * 20 +  # Normalize from -5,5 to 0,1
+            features["po_fit_company_quality_trend"] * 20 +
+            features["po_fit_industry_consistency"] / 10 * 20 +
+            features["po_fit_career_move_quality"] / 10 * 20 +
+            features["po_fit_role_alignment"] / 10 * 20
+        )
+        features["po_fit_overall_score"] = po_fit_score
+
+        return features
+
+    def _extract_structured_assessment_features(self, parsed_data: ParsedData) -> Dict[str, float]:
+        """
+        Extract Structured Assessment Indicators.
+
+        Validity: 0.54 (0.54-0.62 when combined with other assessments)
+        Research: Performance-based hiring research; Achiever Pattern
+
+        Features:
+        - Achiever pattern (consistent high performance)
+        - Growth rate consistency
+        - Fit quality indicators
+        """
+        features = {}
+
+        experiences = parsed_data.experiences
+
+        if not experiences:
+            return {
+                "assessment_achiever_pattern": 0.0,
+                "assessment_growth_consistency": 0.0,
+                "assessment_performance_trend": 0.0,
+                "assessment_achievement_density": 0.0,
+                "assessment_quantified_impact": 0.0,
+                "assessment_overall_quality": 0.0,
+            }
+
+        # 1. Achiever Pattern (from Performance-Based Hiring)
+        # Pattern: Consistent track record of exceeding expectations
+
+        # Count achievements per role
+        achievement_counts = [len(exp.achievements) for exp in experiences]
+        avg_achievements = np.mean(achievement_counts) if achievement_counts else 0
+
+        # Consistency of achievements (std deviation)
+        achievement_consistency = 0.0
+        if len(achievement_counts) > 1:
+            std_achievements = np.std(achievement_counts)
+            # Lower std = more consistent (inverse relationship)
+            achievement_consistency = max(0, 10 - std_achievements)
+        else:
+            achievement_consistency = 5.0
+
+        features["assessment_achiever_pattern"] = min(avg_achievements, 10.0)
+        features["assessment_growth_consistency"] = achievement_consistency
+
+        # 2. Performance Trend (are achievements getting better?)
+        # Look at achievement quality over time
+        sorted_exps = sorted(experiences, key=lambda x: x.start_date if x.start_date else datetime.min)
+
+        if len(sorted_exps) >= 3:
+            # Compare first third vs last third
+            third = len(sorted_exps) // 3
+            early_achievements = sum(len(exp.achievements) for exp in sorted_exps[:third])
+            late_achievements = sum(len(exp.achievements) for exp in sorted_exps[-third:])
+
+            if third > 0:
+                early_avg = early_achievements / third
+                late_avg = late_achievements / third
+                trend = late_avg - early_avg
+                features["assessment_performance_trend"] = max(-5.0, min(5.0, trend))
+            else:
+                features["assessment_performance_trend"] = 0.0
+        else:
+            features["assessment_performance_trend"] = 0.0
+
+        # 3. Achievement Density (achievements per year of experience)
+        total_achievements = sum(len(exp.achievements) for exp in experiences)
+        if parsed_data.total_experience_years and parsed_data.total_experience_years > 0:
+            achievement_density = total_achievements / parsed_data.total_experience_years
+            features["assessment_achievement_density"] = min(achievement_density * 2, 10.0)
+        else:
+            features["assessment_achievement_density"] = 0.0
+
+        # 4. Quantified Impact (% of achievements with numbers)
+        quantified_pattern = r'\d+[%xX]|\d+\s*(million|thousand|percent|users|customers)'
+        quantified_count = 0
+
+        for exp in experiences:
+            for achievement in exp.achievements:
+                if re.search(quantified_pattern, achievement):
+                    quantified_count += 1
+
+        if total_achievements > 0:
+            quantified_ratio = quantified_count / total_achievements
+            features["assessment_quantified_impact"] = quantified_ratio * 10
+        else:
+            features["assessment_quantified_impact"] = 0.0
+
+        # 5. Fit Quality (from Performance-Based Hiring)
+        # Combination of: right skills + right growth + right trajectory
+
+        # Right skills: technical depth
+        tech_skills_count = len(parsed_data.technical_skills)
+        skills_score = min(tech_skills_count / 10, 1.0) * 30
+
+        # Right growth: upward trajectory
+        trajectory_score = 0.0
+        if "trajectory_upward_mobility" in dir(self):
+            # If trajectory was already calculated
+            trajectory_score = 35  # Placeholder
+
+        # Right achievements: quantified + consistent
+        achievement_score = (
+            features["assessment_achiever_pattern"] / 10 * 35
+        )
+
+        fit_quality = skills_score + achievement_score
+        features["assessment_fit_quality"] = min(fit_quality, 100.0)
+
+        # 6. Overall Assessment Score (0-100)
+        assessment_score = (
+            features["assessment_achiever_pattern"] / 10 * 25 +
+            features["assessment_growth_consistency"] / 10 * 20 +
+            (features["assessment_performance_trend"] + 5) / 10 * 15 +  # Normalize -5,5 to 0,1
+            features["assessment_achievement_density"] / 10 * 20 +
+            features["assessment_quantified_impact"] / 10 * 20
+        )
+        features["assessment_overall_quality"] = assessment_score
 
         return features

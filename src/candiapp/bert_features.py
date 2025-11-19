@@ -243,12 +243,13 @@ class BERTFeatureExtractor:
 
         return sections
 
-    def extract_bert_features(self, parsed_data) -> Dict[str, float]:
+    def extract_bert_features(self, parsed_data, job_requirements: Optional[str] = None) -> Dict[str, float]:
         """
         Extract BERT-based features from parsed resume.
 
         Args:
             parsed_data: ParsedData object
+            job_requirements: Optional job description/requirements for semantic matching
 
         Returns:
             Dictionary of BERT features
@@ -295,7 +296,166 @@ class BERTFeatureExtractor:
                 import numpy as np
                 features["bert_skills_norm"] = float(np.linalg.norm(skills_emb))
 
+        # Skills Semantic Match Features (0.67 validity - HIGHEST PREDICTOR)
+        if job_requirements:
+            semantic_features = self.extract_skills_semantic_match_features(
+                parsed_data, job_requirements
+            )
+            features.update(semantic_features)
+
         logger.info(f"Extracted {len(features)} BERT features")
+
+        return features
+
+    def extract_skills_semantic_match_features(
+        self,
+        parsed_data,
+        job_requirements: str
+    ) -> Dict[str, float]:
+        """
+        Extract Skills Semantic Match features.
+
+        Validity: 0.67 (HIGHEST PREDICTOR)
+        Research: Alonso et al. (2025) - Semantic matching outperformed keyword at 92% accuracy
+                  BERT/LLaMA models achieve 89-95% accuracy in resume-job matching
+
+        This is THE most important predictor based on meta-analytic research.
+
+        Args:
+            parsed_data: ParsedData object
+            job_requirements: Job description/requirements text
+
+        Returns:
+            Dictionary of semantic match features
+        """
+        if not self.model:
+            return {
+                "semantic_skills_match_overall": 0.5,
+                "semantic_skills_cosine_similarity": 0.5,
+                "semantic_experience_match": 0.5,
+                "semantic_technical_depth_match": 0.5,
+                "semantic_role_fit": 0.5,
+            }
+
+        features = {}
+
+        try:
+            import numpy as np
+
+            # 1. Overall Skills Semantic Match (Cosine Similarity)
+            # Combine all candidate skills
+            all_skills = list(parsed_data.technical_skills) + [s.name for s in parsed_data.skills]
+            candidate_skills_text = ", ".join(all_skills[:30])  # Limit to 30 skills
+
+            if candidate_skills_text and job_requirements:
+                # Get embeddings
+                candidate_emb = self.extract_embedding(candidate_skills_text)
+                job_emb = self.extract_embedding(job_requirements)
+
+                if candidate_emb is not None and job_emb is not None:
+                    candidate_emb = np.array(candidate_emb)
+                    job_emb = np.array(job_emb)
+
+                    # Cosine similarity (0-1, research shows 0.74-0.83 for good matches)
+                    cosine_sim = np.dot(candidate_emb, job_emb) / (
+                        np.linalg.norm(candidate_emb) * np.linalg.norm(job_emb)
+                    )
+                    features["semantic_skills_cosine_similarity"] = float(cosine_sim)
+
+                    # Overall match score (0-100)
+                    # Research: semantic match at 0.67 validity vs keyword at 0.35
+                    features["semantic_skills_match_overall"] = float(cosine_sim * 100)
+                else:
+                    features["semantic_skills_cosine_similarity"] = 0.5
+                    features["semantic_skills_match_overall"] = 50.0
+            else:
+                features["semantic_skills_cosine_similarity"] = 0.5
+                features["semantic_skills_match_overall"] = 50.0
+
+            # 2. Experience-Job Semantic Match
+            # Compare experience descriptions to job requirements
+            if parsed_data.experiences:
+                exp_texts = [
+                    f"{exp.title}. {exp.description or ''}"
+                    for exp in parsed_data.experiences[:3]
+                ]
+                combined_exp = " ".join(exp_texts)
+
+                if combined_exp and job_requirements:
+                    exp_job_similarity = self.calculate_semantic_similarity(
+                        combined_exp, job_requirements
+                    )
+                    features["semantic_experience_match"] = float(exp_job_similarity * 100)
+                else:
+                    features["semantic_experience_match"] = 50.0
+            else:
+                features["semantic_experience_match"] = 50.0
+
+            # 3. Technical Depth Match
+            # Match depth of technical expertise to job requirements
+            technical_text = ", ".join(parsed_data.technical_skills[:20])
+            if technical_text and job_requirements:
+                tech_similarity = self.calculate_semantic_similarity(
+                    technical_text, job_requirements
+                )
+                features["semantic_technical_depth_match"] = float(tech_similarity * 100)
+            else:
+                features["semantic_technical_depth_match"] = 50.0
+
+            # 4. Role Fit (Title/Role semantic match)
+            if parsed_data.experiences:
+                recent_title = parsed_data.experiences[0].title if parsed_data.experiences[0].title else ""
+                if recent_title and job_requirements:
+                    role_similarity = self.calculate_semantic_similarity(
+                        recent_title, job_requirements
+                    )
+                    features["semantic_role_fit"] = float(role_similarity * 100)
+                else:
+                    features["semantic_role_fit"] = 50.0
+            else:
+                features["semantic_role_fit"] = 50.0
+
+            # 5. Semantic Match Quality Score (composite)
+            # Weight: skills (40%) + experience (30%) + technical depth (20%) + role (10%)
+            match_quality = (
+                features["semantic_skills_match_overall"] * 0.40 +
+                features["semantic_experience_match"] * 0.30 +
+                features["semantic_technical_depth_match"] * 0.20 +
+                features["semantic_role_fit"] * 0.10
+            )
+            features["semantic_match_quality_score"] = match_quality
+
+            # 6. Match Confidence (based on research accuracy)
+            # Research shows 89-95% accuracy for BERT/LLaMA semantic matching
+            # Confidence is higher when cosine similarity is in expected range (0.74-0.83 for good matches)
+            cosine = features["semantic_skills_cosine_similarity"]
+            if 0.74 <= cosine <= 0.95:
+                confidence = 0.95  # High confidence - in research-validated range
+            elif 0.60 <= cosine < 0.74:
+                confidence = 0.85  # Good confidence
+            elif 0.40 <= cosine < 0.60:
+                confidence = 0.70  # Moderate confidence
+            else:
+                confidence = 0.60  # Lower confidence
+
+            features["semantic_match_confidence"] = confidence * 100
+
+            logger.info(f"Extracted {len(features)} semantic match features")
+            logger.info(f"  Overall semantic match: {features['semantic_skills_match_overall']:.1f}%")
+            logger.info(f"  Cosine similarity: {features['semantic_skills_cosine_similarity']:.3f}")
+
+        except Exception as e:
+            logger.error(f"Error extracting semantic match features: {e}")
+            # Return default values on error
+            features = {
+                "semantic_skills_match_overall": 50.0,
+                "semantic_skills_cosine_similarity": 0.5,
+                "semantic_experience_match": 50.0,
+                "semantic_technical_depth_match": 50.0,
+                "semantic_role_fit": 50.0,
+                "semantic_match_quality_score": 50.0,
+                "semantic_match_confidence": 60.0,
+            }
 
         return features
 

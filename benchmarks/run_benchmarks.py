@@ -120,11 +120,12 @@ def main():
     logger.info("📝 STEP 1: Generating Synthetic Dataset")
     logger.info("="*80)
 
+    from candiapp.models import ExperienceLevel
+
     generator = SyntheticResumeGenerator()
 
     # Distribution: More mid-level and senior candidates
     distribution = {
-        from candiapp.models import ExperienceLevel
         ExperienceLevel.ENTRY: 0.10,
         ExperienceLevel.JUNIOR: 0.15,
         ExperienceLevel.MID: 0.30,
